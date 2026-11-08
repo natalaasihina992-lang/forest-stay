@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Мои бронирования — Forest Stay{% endblock %}
+{% block content %}
+<section class="section profile-section">
+  <div class="eyebrow">ЛИЧНЫЙ КАБИНЕТ</div>
+  <h1>Привет, <em>{{ user.name }}.</em></h1>
+  
+  {% if success %}
+  <div class="success-message">{{ success }}</div>
+  {% endif %}
+  
+  <div class="profile-title">
+    <h2>Мои бронирования</h2>
+    <span>{{ bookings|length }} всего</span>
+  </div>
+  
+  {% if bookings %}
+  <div class="booking-list">
+    {% for b in bookings %}
+    <article class="booking-item">
+      <div class="booking-main">
+        <span class="eyebrow">БРОНЬ №{{ b.id }}</span>
+        <h3>{{ b.title }}</h3>
+        <p>{{ b.location }}</p>
+        <div class="booking-dates">
+          {{ b.check_in.strftime("%d.%m.%Y") }} — {{ b.check_out.strftime("%d.%m.%Y") }} · {{ b.guests }} гостей
+        </div>
+      </div>
+      <div class="booking-side">
+        <b>{{ b.total_price }} ₽</b>
+        <span class="status {% if b.status == 'cancelled' %}cancelled{% endif %}">
+          {% if b.status == 'confirmed' %}Подтверждено{% else %}Отменено{% endif %}
+        </span>
+        {% if b.status == 'confirmed' %}
+        <form method="post" action="/booking/{{ b.id }}/cancel" onsubmit="return confirm('Отменить бронирование?')">
+          <button class="cancel-button">Отменить</button>
+        </form>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h2>Пока нет поездок</h2>
+    <p>Самое время выбрать домик для отдыха.</p>
+    <a href="/houses" class="button">Посмотреть домики</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

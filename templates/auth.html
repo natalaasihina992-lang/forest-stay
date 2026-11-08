@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == 'register' %}Регистрация{% else %}Вход{% endif %} — Forest Stay{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="auth-form-wrap">
+    <div class="eyebrow">ДОБРО ПОЖАЛОВАТЬ</div>
+    
+    {% if mode == 'register' %}
+      <h1>Создать<br><em>аккаунт.</em></h1>
+      <p class="muted">Сохраняйте бронирования и планируйте отдых.</p>
+    {% else %}
+      <h1>С возвращением.</h1>
+      <p class="muted">Войдите, чтобы посмотреть свои поездки.</p>
+    {% endif %}
+    
+    {% if request.query_params.get('error') %}
+    <div class="alert">{{ request.query_params.get('error') }}</div>
+    {% endif %}
+    
+    <form method="post" action="/{{ mode }}" class="auth-form">
+      {% if mode == 'register' %}
+      <label>Ваше имя<input name="name" placeholder="Иван" required minlength="2"></label>
+      {% endif %}
+      <label>Почта<input type="email" name="email" placeholder="name@example.com" required></label>
+      <label>Пароль<input type="password" name="password" placeholder="Минимум 6 символов" required minlength="6"></label>
+      <button class="button full">{% if mode == 'register' %}Зарегистрироваться{% else %}Войти{% endif %}</button>
+    </form>
+    
+    <p class="auth-switch">
+      {% if mode == 'register' %}
+        Уже есть аккаунт? <a href="/login">Войти</a>
+      {% else %}
+        Впервые у нас? <a href="/register">Создать аккаунт</a>
+      {% endif %}
+    </p>
+  </div>
+</section>
+{% endblock %}

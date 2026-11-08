@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Forest Stay — отдых за городом{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="eyebrow light"><span></span> ВРЕМЯ ПОБЫТЬ БЛИЖЕ К ПРИРОДЕ</div>
+    <h1>Найди свой<br><em>тихий уголок.</em></h1>
+    <p>Небольшие дома среди леса, у озера и вдали от городской суеты.</p>
+    <a class="button button-light" href="/houses">Выбрать домик <span>↗</span></a>
+  </div>
+  <div class="hero-note">МЕНЬШЕ ШУМА — БОЛЬШЕ ЖИЗНИ</div>
+</section>
+
+<section class="search-wrap">
+  <form class="search-panel" action="/houses" method="get">
+    <label><span>КУДА ОТПРАВИМСЯ?</span><input name="q" placeholder="Например, Тверская область"></label>
+    <label><span>СКОЛЬКО ГОСТЕЙ?</span><select name="guests"><option value="1">1 гость</option><option value="2">2 гостя</option><option value="3">3 гостя</option><option value="4">4 гостя</option></select></label>
+    <button class="button button-green" type="submit">Найти домик <b>→</b></button>
+  </form>
+</section>
+
+<section class="section">
+  <div class="section-heading">
+    <div><div class="eyebrow"><span></span> ПОДБОРКА ДЛЯ ВАС</div><h2>Места, в которые<br><em>хочется вернуться.</em></h2></div>
+    <a class="text-link" href="/houses">Все домики <span>↗</span></a>
+  </div>
+  <div class="house-grid">
+    {% for house in houses %}
+    <a class="house-card" href="/house/{{ house.id }}">
+      <div class="house-image"><img src="{{ house.image_url }}" alt="{{ house.title }}"><span class="image-tag">ЛЕСНОЙ ОТДЫХ</span></div>
+      <div class="house-info"><div><h3>{{ house.title }}</h3><p>{{ house.location }} · до {{ house.guests }} гостей</p></div><strong>{{ "{:,.0f}".format(house.price).replace(",", " ") }} ₽<small>/ ночь</small></strong></div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+<section class="quote-section"><p>«Иногда лучшее, что можно запланировать, — это немного тишины».</p><span>FOREST STAY MANIFESTO</span></section>
+{% endblock %}

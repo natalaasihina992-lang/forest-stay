@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ house.title }} — Forest Stay{% endblock %}
+{% block content %}
+<section class="section detail-section">
+  <a class="back-link" href="/houses">← Все домики</a>
+  
+  <div class="detail-heading">
+    <div>
+      <div class="eyebrow">{{ house.location|upper }}</div>
+      <h1>{{ house.title }}</h1>
+      <p>{{ house.location }} · до {{ house.guests }} гостей</p>
+    </div>
+    <div class="detail-price">{{ house.price }} ₽<small>за ночь</small></div>
+  </div>
+
+  <div class="detail-layout">
+    <div class="detail-copy">
+      <h2>Ваше место для отдыха</h2>
+      <p>{{ house.description }}</p>
+      <h3>Что есть в домике</h3>
+      <div class="amenities">
+        {% for item in house.amenities.split(",") %}
+        <span>{{ item }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    
+    <aside class="booking-card">
+      <div class="booking-price"><b>{{ house.price }} ₽</b> / ночь</div>
+      
+      {% if request.query_params.get('error') %}
+      <div class="alert">{{ request.query_params.get('error') }}</div>
+      {% endif %}
+      
+      <form action="/book/{{ house.id }}" method="post" class="booking-form">
+        <label>Заезд<input type="date" name="check_in" min="{{ today }}" required></label>
+        <label>Выезд<input type="date" name="check_out" min="{{ today }}" required></label>
+        <label>Гостей<select name="guests">{% for n in range(1, house.guests + 1) %}<option value="{{ n }}">{{ n }}</option>{% endfor %}</select></label>
+        <button class="button full">Забронировать</button>
+      </form>
+    </aside>
+  </div>
+</section>
+{% endblock %}

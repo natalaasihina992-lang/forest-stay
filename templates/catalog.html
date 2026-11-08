@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Домики — Forest Stay{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="eyebrow">КОЛЛЕКЦИЯ МЕСТ</div>
+  <h1>Выбери свой<br><em>домик.</em></h1>
+  <p>Каждое место — возможность выдохнуть и сменить обстановку.</p>
+</section>
+
+<section class="section catalog-section">
+  <form class="filters" action="/houses" method="get">
+    <label>Поиск<input name="q" value="{{ q }}" placeholder="Название или регион"></label>
+    <label>Гостей<select name="guests">{% for n in range(1,7) %}<option value="{{ n }}" {% if guests == n %}selected{% endif %}>{{ n }}</option>{% endfor %}</select></label>
+    <label>Цена до, ₽<input type="number" name="max_price" value="{{ max_price or '' }}" placeholder="Без ограничения"></label>
+    <button class="button">Применить</button>
+  </form>
+  
+  <div class="results-line"><span>НАЙДЕНО МЕСТ: {{ houses|length }}</span></div>
+  
+  {% if houses %}
+  <div class="house-grid">
+    {% for house in houses %}
+    <a class="house-card" href="/house/{{ house.id }}">
+      <div class="house-info">
+        <h3>{{ house.title }}</h3>
+        <p>{{ house.location }} · до {{ house.guests }} гостей</p>
+        <div class="price">{{ house.price }} ₽ <small>/ ночь</small></div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h2>Пока ничего не нашлось</h2>
+    <p>Попробуйте изменить параметры поиска.</p>
+    <a class="button" href="/houses">Сбросить фильтры</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
